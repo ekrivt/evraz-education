@@ -5,7 +5,7 @@ echo "====================="
 echo
 
 echo "Getting local IP..."
-LOCAL_IP=$(ifconfig eth0 | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*')
+LOCAL_IP=$(ifconfig tunl0 | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*')
 echo "Local IP is $LOCAL_IP"
 export LOCAL_IP=${LOCAL_IP}
 echo
