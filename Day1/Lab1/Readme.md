@@ -39,45 +39,45 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose
 ***Авторизация через Docker***
 
 ```shell
-docker login
+sudo docker login
 ```
 ***Получение образа nginx***
 
 ```shell
-docker pull nginx
+sudo docker pull nginx
 ```
 ***Запуск образа nginx***
 
 ```shell
-docker run -it -p 80:80 nginx
+sudo docker run -it -p 80:80 nginx
 ```    
 Перейдем в браузере по адресу `http://localhost/`
 
 В новом терминале 
 
 ```shell
-docker ps
+sudo docker ps
 
-docker container ls
+sudo docker container ls
 
-docker stop *
+sudo docker stop *
 
-docker prune
+sudo docker container prune
 ```
 
 ***Просмотр локальных образов***
 
 ```shell
-docker image ls
+sudo docker image ls
 
-docker image rm *
+sudo docker image rm *
 
-docker image prune
+sudo docker image prune
 ```
 ***Очистка docker***
 
 ```shell
-docker system prune
+sudo docker system prune
 ```
 ***Создаем JSON файл с информацией для доступа к БД***
 
@@ -85,7 +85,7 @@ docker system prune
 
 ```json
 {
-    "HOST":"192.168.1.2",
+    "HOST":"external_ip",
     "PORT":"5432",
     "DBNAME":"lab1_db",
     "USER":"postgres",
@@ -99,7 +99,7 @@ docker system prune
 ```shell
 apt install golang-go
 ```
-***Скачиваем исходный код приложения из github: ${Адрес репозитория на гитхабе с файлом main.go}***
+***Скачиваем исходный код приложения из github***
 
 Добавим файл с исходным кодом приложения main.go в папку app и перейдем в нее
 
@@ -111,16 +111,16 @@ go mod init main.go
 ***Запустим контенер Nginx***
 
 ```shell
-docker run --name nginx-proxy -it -p 80:80 -p 443:443 -v /etc/nginx/vhost.d \
+sudo docker run --name nginx-proxy -it -p 80:80 -p 443:443 -v /etc/nginx/vhost.d \
     -v /usr/share/nginx/html -v /var/run/docker.sock:/tmp/docker.sock:ro \
-    -v /etc/nginx/certs jwilder/nginx-proxy
+    -v /etc/nginx/certs -d jwilder/nginx-proxy
 ```
 ***Создадим сеть***
 
 ```shell
-docker network create lab-net
+sudo docker network create lab-net
 
-docker network connect lab-net nginx-proxy
+sudo docker network connect lab-net nginx-proxy
 ```
 ***Создадим Dockerfile для контенерезации приложения***
 
@@ -145,9 +145,9 @@ ENTRYPOINT /go/bin/web-app --port 80
 ***Соберем образ из Dockerfile'а***
 
 ```shell
-docker build -t lab1-app -f Dockerfile .
+sudo docker build -t lab1-app -f Dockerfile .
 
-docker run -it -e VIRTUAL_HOST=192.168.0.110 --network lab-net lab1-app
+sudo docker run -it -e VIRTUAL_HOST=external_ip --network lab-net -d lab1-app
 ```
 
 ***Создадим два Docker-compose файла для ускорения развертывания***
@@ -180,22 +180,22 @@ services:
             dockerfile: Dockerfile
             context: .
         environment:
-        - VIRTUAL_HOST=192.168.1.2
+        - VIRTUAL_HOST=external_ip
 ```
 
 ***Запустим Docker-compose для сборки и запуска контейнеров***
 
 ```shell
-docker-compose -f nginx-compose.yaml up -d 
-docker-compose -f lab1-compose.yaml up -d 
+sudo docker-compose -f nginx-compose.yaml up -d 
+sudo docker-compose -f lab1-compose.yaml up -d 
 ```
-Проверим корректность работы приложения перейдя на адрес 192.168.1.2 в браузере
+Проверим корректность работы приложения перейдя на адрес external_ip в браузере
 
 ***Остановка контейнеров через Docker-compose***
 
 ```shell
-docker-compose -f nginx-compose.yaml down -d 
-docker-compose -f lab1-compose.yaml down -d
+sudo docker-compose -f nginx-compose.yaml down -d 
+sudo docker-compose -f lab1-compose.yaml down -d
 ```
 ***Объединим оба compose-файла в один***
 
@@ -231,12 +231,12 @@ nginx-proxy:
 ***Запустим и проверим общий compose-файла***
 
 ```shell
-docker-compose -f lab1-final-compose.yaml up -d 
+sudo docker-compose -f lab1-final-compose.yaml up -d 
 ```
 ***Остановим все контейнеры и очистим систему***
 
 ```shell
-docker-compose -f lab1-final-compose.yaml down
+sudo docker-compose -f lab1-final-compose.yaml down
 
-docker system prune
+sudo docker system prune
 ```
