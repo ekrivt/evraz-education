@@ -206,34 +206,34 @@ sudo docker-compose -f lab1-compose.yaml down
 ```
 ***Объединим оба compose-файла в один***
 
-**nginx-compose.yaml**
+**lab1-final-compose.yaml**
 
 ```yaml
 version: '3'
 services:
-lab1-app:
+  lab1-app:
     restart: always
     container_name: lab1-app
     depends_on:
-    - nginx-proxy
+      - nginx-proxy
     build:
-    dockerfile: Dockerfile
-    context: .
+      dockerfile: Dockerfile
+      context: .
     environment:
-    - VIRTUAL_HOST=192.168.0.110
+      - VIRTUAL_HOST=192.168.1.2
 
-nginx-proxy:
+  nginx-proxy:
     restart: always
     container_name: nginx-proxy
     image: jwilder/nginx-proxy
     ports:
-    - "80:80"
-    - "443:443"
+      - "80:80"
+      - "443:443"
     volumes:
-    - "/etc/nginx/vhost.d"
-    - "/usr/share/nginx/html"
-    - "/var/run/docker.sock:/tmp/docker.sock:ro"
-    - "/etc/nginx/certs"
+      - "/etc/nginx/vhost.d"
+      - "/usr/share/nginx/html"
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
+      - "/etc/nginx/certs"
 ```
 ***Запустим и проверим общий compose-файла***
 
