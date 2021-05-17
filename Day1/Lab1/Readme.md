@@ -28,7 +28,7 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose
 ```shell
 sudo ./prereq.sh
 
-locate postgresql.sh
+locate postgresql.conf
 
 sudo nano <имя файла>
 найти строчку listen_addresses и добавить наш внешний ip aдрес после запятой
