@@ -26,8 +26,15 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose
 ***Установка и настройка PostgreSQL:***
 
 ```shell
-./prereq.sh
-./postgres.sh
+sudo ./prereq.sh
+
+locate postgresql.sh
+
+sudo nano <имя файла>
+найти строчку listen_addresses и добавить наш внешний ip aдрес после запятой
+сохранить
+
+sudo ./postgres.sh
 ```
 
 ***Регистрация в DockerHub***
@@ -97,7 +104,7 @@ sudo docker system prune
 ***Установка GO:***
 
 ```shell
-apt install golang-go
+sudo apt install golang-go
 ```
 ***Скачиваем исходный код приложения из github***
 
@@ -194,8 +201,8 @@ sudo docker-compose -f lab1-compose.yaml up -d
 ***Остановка контейнеров через Docker-compose***
 
 ```shell
-sudo docker-compose -f nginx-compose.yaml down -d 
-sudo docker-compose -f lab1-compose.yaml down -d
+sudo docker-compose -f nginx-compose.yaml down 
+sudo docker-compose -f lab1-compose.yaml down
 ```
 ***Объединим оба compose-файла в один***
 
