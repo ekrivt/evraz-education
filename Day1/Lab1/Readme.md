@@ -23,6 +23,8 @@ sudo apt-get update
 
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose
 ```
+***Скачиваем исходный код приложения из github***
+
 ***Установка и настройка PostgreSQL:***
 
 ```shell
@@ -30,9 +32,13 @@ sudo ./prereq.sh
 
 locate postgresql.conf
 
-sudo nano <имя файла>
+sudo nano /etc/postgresql/12/main/postgresql.conf
+
 найти строчку listen_addresses и добавить наш внешний ip aдрес после запятой
 сохранить
+
+locate pg_hba.conf
+sudo nano /etc/postgresql/12/main/pg_hba.conf
 
 sudo ./postgres.sh
 ```
@@ -92,7 +98,7 @@ sudo docker system prune
 
 ```json
 {
-    "HOST":"external_ip",
+    "HOST":"внешний ip адрес",
     "PORT":"5432",
     "DBNAME":"lab1_db",
     "USER":"postgres",
@@ -106,7 +112,6 @@ sudo docker system prune
 ```shell
 sudo apt install golang-go
 ```
-***Скачиваем исходный код приложения из github***
 
 Добавим файл с исходным кодом приложения main.go в папку app и перейдем в нее
 
@@ -129,7 +134,7 @@ sudo docker network create lab-net
 
 sudo docker network connect lab-net nginx-proxy
 ```
-***Создадим Dockerfile для контенерезации приложения***
+***Создадим Dockerfile для контейнеризации приложения***
 
 Добавим в папку app файл Dockerfile со следующим содержанием
 
@@ -168,13 +173,13 @@ services:
         restart: always
         image: jwilder/nginx-proxy
         ports:
-        - "80:80"
-        - "443:443"
+          - "80:80"
+          - "443:443"
         volumes:
-        - "/etc/nginx/vhost.d"
-        - "/usr/share/nginx/html"
-        - "/var/run/docker.sock:/tmp/docker.sock:ro"
-        - "/etc/nginx/certs"
+          - "/etc/nginx/vhost.d"
+          - "/usr/share/nginx/html"
+          - "/var/run/docker.sock:/tmp/docker.sock:ro"
+          - "/etc/nginx/certs"
 ```
 **lab1-compose**
 
@@ -187,7 +192,7 @@ services:
             dockerfile: Dockerfile
             context: .
         environment:
-        - VIRTUAL_HOST=external_ip
+          - VIRTUAL_HOST=external_ip
 ```
 
 ***Запустим Docker-compose для сборки и запуска контейнеров***
@@ -220,7 +225,7 @@ services:
       dockerfile: Dockerfile
       context: .
     environment:
-      - VIRTUAL_HOST=192.168.1.2
+      - VIRTUAL_HOST=внешний ip адрес
 
   nginx-proxy:
     restart: always
@@ -235,7 +240,7 @@ services:
       - "/var/run/docker.sock:/tmp/docker.sock:ro"
       - "/etc/nginx/certs"
 ```
-***Запустим и проверим общий compose-файла***
+***Запустим и проверим общий compose-файл***
 
 ```shell
 sudo docker-compose -f lab1-final-compose.yaml up -d 
