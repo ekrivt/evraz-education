@@ -113,7 +113,7 @@ sudo apt install golang-go
 Запустим go mod для подготовки списка модулей
 
 ```shell
-go mod init main.go
+sudo go mod init main.go
 ```
 ***Запустим контенер Nginx***
 
