@@ -58,7 +58,7 @@ sudo docker pull nginx
 ```shell
 sudo docker run -it -p 80:80 nginx
 ```    
-Перейдем в браузере по адресу `http://external_ip/` или сделаем curl external_ip
+Перейдем в браузере по адресу `http://localhost/` или сделаем curl localhost
 
 В новом терминале 
 
