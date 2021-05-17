@@ -56,9 +56,9 @@ sudo docker pull nginx
 ***Запуск образа nginx***
 
 ```shell
-sudo docker run -it -p 80:80 nginx
+sudo docker run -idt -p 80:80 nginx
 ```    
-Перейдем в браузере по адресу `http://localhost/` или сделаем curl localhost
+Перейдем в браузере по адресу `http://localhost/` или сделаем curl `http://localhost/`
 
 В новом терминале 
 
