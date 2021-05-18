@@ -1,0 +1,24 @@
+version: '3'
+services:
+  web:
+    restart: always
+    build: .
+    container_name: dg01
+    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py initadmin && python3 manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - db
+    volumes:
+      - ./src:/src
+    ports:
+      - "8000:8000"
+
+  db:
+    restart: always
+    image: postgres:9.5
+    container_name: ps01
+    ports:
+      - "5432:5432"
+    environment:
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_USER=postgres
+        - POSTGRES_DB=postgres

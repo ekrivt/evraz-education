@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row" style="margin-bottom: 200px; margin-top: 160px">
+    <div class="col-md">
+        <h3 class="text-center">Список проектов:</h3>
+    </div>
+</div>
+<div class="row" style="margin-bottom: 200px; margin-top: 160px">
+    {% for project in projects %}
+    <div class="col-md-6">
+        <hr>
+            <form action="" method="GET">
+                <div class="list-group">
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">{{ project.name }}</th>
+                        </tr>
+                        </thead>
+                        {% for task in tasks %}
+                        {% if task.project|stringformat:"s" == project.name %}
+                        <tbody>
+                            <tr>
+                                <td><a class="nav-link" href="/api/task/{{ task.pk }}">{{ task.name }}</a></td>
+                            </tr>
+                        </tbody>
+                        {% endif %}
+                        {% endfor %}
+                    </table>
+                </div>
+            </form>
+    </div>    
+    {% endfor %}
+</div>
+{% if user.is_authenticated %}
+<div class="col-md-9">
+    <h3 class="text-center">Добавить новый проект:</h3>
+    <hr>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <input type="submit" class="btn btn-success btn-block" value="Добавить">
+    </form>
+</div>
+{% endif %}
+{% endblock %}
