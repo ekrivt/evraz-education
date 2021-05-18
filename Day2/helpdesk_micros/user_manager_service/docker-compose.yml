@@ -23,7 +23,6 @@ services:
         - POSTGRES_USER=postgres
         - POSTGRES_DB=postgres
 
-
 networks:
   default:
     external: true

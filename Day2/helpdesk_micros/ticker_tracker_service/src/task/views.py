@@ -5,6 +5,7 @@ import json
 from django.shortcuts import render
 from requests.api import request
 from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
 
 from rest_framework import viewsets
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -12,7 +13,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.generics import ListCreateAPIView
 
 from .models import Task, Description, UserProfile
-from .form import TaskListForm
+from .form import TaskListForm, LoginForm, RegistrationForm
 from .permission import IsOwnerProfileOrReadOnly
 from .serializers import TaskSerializer, DescriptionSerializer, ProfileSerializer
 
@@ -25,11 +26,20 @@ def get_token():
         }
     response = requests.post('http://user-service:8000/auth/jwt/create/', data=post_data)
     token = response.json().get('access')
+    print(token)
     return token
 
 def get_userlist():
         res=requests.get('http://user-service:8000/auth/users/', headers={'Authorization': 'Bearer {}'.format(get_token())})
         return res.json().get('results')
+
+def get_username():
+    userlist = get_userlist()
+    if userlist is not None:
+        user = get_userlist()[0]
+        return user.get('username')
+    return ""
+
 
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
@@ -78,34 +88,65 @@ class ProfileView(viewsets.ModelViewSet):
 class TaskDetailView(View):
     serializer_class = TaskSerializer
     permission_classes = ()
-    user = get_userlist()[0]
-    name = user.get('username')
 
     def get(self, request, *args, **kwargs):
         form = TaskListForm(request.POST or None)
         tasks = Task.objects.all()
+        #user = UserProfile.objects.get(user=self.request.user)
         context = {
             'form': form,
             'tasks': tasks,
-            'account': self.name
+            #'account': user,
+            'id': False
         }
         return render(request, 'task.html', context)
 
     def get_task_by_id(request, task_id):
         form = TaskListForm(request.POST or None)
         tasks = Task.objects.all()
+        #user = UserProfile.objects.get(user=request.user)
         context = {
             'form': form,
             'tasks': tasks.filter(pk=task_id),
-            #'account': name
+            #'account': user,
+            'id' : True 
         }
         return render(request, 'task.html', context)
+
+    def change_status_open(request, task_id):
+        form = TaskListForm(request.POST or None)
+        tasks = Task.objects.all()
+
+        task = Task.objects.get(pk=task_id)
+        task.status = 'open'
+        task.save()
+
+        return HttpResponseRedirect('/task/{}'.format(task_id))
+
+    def change_status_resolve(request, task_id):
+        form = TaskListForm(request.POST or None)
+        tasks = Task.objects.all()
+
+        task = Task.objects.get(pk=task_id)
+        task.status = 'resolve'
+        task.save()
+
+        return HttpResponseRedirect('/task/{}'.format(task_id))
+
+    def change_status_cancel(request, task_id):
+        form = TaskListForm(request.POST or None)
+        tasks = Task.objects.all()
+
+        task = Task.objects.get(pk=task_id)
+        task.status = 'cancel'
+        task.save()
+
+        return HttpResponseRedirect('/task/{}'.format(task_id))
 
 class TaskView(View):
     serializer_class = TaskSerializer
     permission_classes = ()
-    user = get_userlist()[0]
-    name = user.get('username')
+    name = get_username()
 
     def get(self, request, *args, **kwargs):
         form = TaskListForm(request.POST or None)
@@ -151,6 +192,65 @@ class UserProfileDetailView(viewsets.ModelViewSet):
             }
         response = requests.post('http://user-service:8000/auth/jwt/create/', data=post_data, auth=('admin', '1q2w3e4r5!'))
         token = response.json().get('access')
-        return response#{ 'token':token }
+        return response
 
+class LoginView(View):
+
+    def get(self, request, *args, **kwargs):
+        form = LoginForm(request.POST or None)
+        context = {
+            'form': form,
+        }
+        return render(request, 'login.html', context)
+
+    '''def post(self, request, *args, **kwargs):
+        form = LoginForm(request.POST or None)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            
+
+            if user:
+                login(request, user)
+                print('{} :Access granted'.format(user))
+                return HttpResponseRedirect('/api/project')
+        context = {
+            'form': form,
+        }
+        return render(request, 'login.html', context, c)'''
+
+
+class RegistrationView(View):
+
+    def get(self, request, *args, **kwargs):
+        form = RegistrationForm(request.POST or None)
+        context = {
+            'form': form,
+        }
+        return render(request, 'registration.html', context)
+
+    def post(self, request, *args, **kwargs):
+        user = self.request.user
+        accounts = UserProfile()
+        form = RegistrationForm(request.POST or None)
+        if form.is_valid():
+            '''new_user = form.save(commit=False)
+            new_user.username = form.cleaned_data['username']
+            new_user.save()
+            new_user.set_password(form.cleaned_data['password'])
+            new_user.save()'''
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            post_data = {
+                        "username": username,
+                        "password": password
+                    }
+            response = requests.post('http://user-service:8000/registration/' ,data=post_data, headers={ "Content-Type": "application/json" })
+            #login(request, user)
+            return HttpResponseRedirect('/project')
+        context = {
+            'form': form,
+        }
+        return render(request, 'registration.html', context, c)
     
