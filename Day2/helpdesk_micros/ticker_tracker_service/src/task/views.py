@@ -12,6 +12,8 @@ from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import IsAdminUser
 from rest_framework.generics import ListCreateAPIView
 
+from django.contrib.auth import login, authenticate
+
 from .models import Task, Description, UserProfile
 from .form import TaskListForm, LoginForm, RegistrationForm
 from .permission import IsOwnerProfileOrReadOnly
@@ -206,6 +208,16 @@ class LoginView(View):
     def post(self, request, *args, **kwargs):
         form = LoginForm(request.POST or None)
         if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            #user = User(username=username, password=password)
+            '''authenticate(
+                username=username, password=password
+            )'''
+
+            #login(request, user)
+            #print(self.request.user)
             return HttpResponseRedirect('/project')
 
         context = {
@@ -228,20 +240,9 @@ class RegistrationView(View):
         accounts = UserProfile()
         form = RegistrationForm(request.POST or None)
         if form.is_valid():
-            '''new_user = form.save(commit=False)
-            new_user.username = form.cleaned_data['username']
-            new_user.save()
-            new_user.set_password(form.cleaned_data['password'])
-            new_user.save()'''
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            post_data = {
-                        "username": username,
-                        "password": password
-                    }
-            response = requests.post('http://user-service:8000/registration/' , json=post_data, headers={ "Content-Type": "application/json" })
-            #login(request, user)
-            return HttpResponseRedirect('/project')
+            return HttpResponseRedirect('/login')
         context = {
             'form': form,
         }

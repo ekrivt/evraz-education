@@ -95,28 +95,20 @@ class RegistrationForm(forms.ModelForm):
         self.fields['confirm_password'].label = 'Подтвердите пароль'
         self.fields['status'].lable = 'Статус'
 
-    def clean_email(self):
-        email = self.cleaned_data['email']
-        domain = email.split('.')[-1]
-        if domain in ['.com', '.ru', '.org']:
-            raise forms.ValidationError('Регистрация для домена {{ domain }} невозможна')
-        if User.objects.filter(email=email).exists():
-            raise forms.ValidationError(
-                'Данный почтовый адрес уже зарегистрирован в системе'
-            )
-        return email
-
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        if User.objects.filter(username=username).exists():
-            raise forms.ValidationError(
-                'Имя занято'
-            )
-        return username
-
     def clean(self):
+        username = self.cleaned_data['username']
         password = self.cleaned_data['password']
         confirm_password = self.cleaned_data['confirm_password']
+
+        post_data = {
+            "username": username,
+            "password": password
+        }
+        response = requests.post('http://user-service:8000/registration/' , json=post_data, headers={ "Content-Type": "application/json" })
+
+        if response.status_code == HTTPStatus.CONFLICT:
+            raise forms.ValidationError("Имя занято")
         if password != confirm_password:
             raise forms.ValidationError('Пароли не совпадают')
+            
         return self.cleaned_data
