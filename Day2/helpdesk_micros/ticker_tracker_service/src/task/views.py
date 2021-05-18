@@ -246,7 +246,7 @@ class RegistrationView(View):
                         "username": username,
                         "password": password
                     }
-            response = requests.post('http://user-service:8000/registration/' ,data=post_data, headers={ "Content-Type": "application/json" })
+            response = requests.post('http://user-service:8000/registration/' , json=post_data, headers={ "Content-Type": "application/json" })
             #login(request, user)
             return HttpResponseRedirect('/project')
         context = {
