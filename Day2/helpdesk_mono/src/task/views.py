@@ -2,6 +2,7 @@ from django.db.models import Q
 from django.views.generic import DetailView, View
 from django.shortcuts import render
 from django.contrib.auth import get_user_model
+from django.http import HttpResponseRedirect
 
 from rest_framework import viewsets
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -69,21 +70,70 @@ class TaskDetailView(View):
         context = {
             'form': form,
             'tasks': tasks,
-            'account': user
+            'account': user,
+            'id': False
         }
         return render(request, 'task.html', context)
 
     def get_task_by_id(request, task_id):
         form = TaskListForm(request.POST or None)
         tasks = Task.objects.all()
-        print(UserProfile.objects.all())
+        user = UserProfile.objects.get(user=request.user)
+        context = {
+            'form': form,
+            'tasks': tasks.filter(pk=task_id),
+            'account': user,
+            'id' : True 
+        }
+        return render(request, 'task.html', context)
+
+    def change_status_open(request, task_id):
+        form = TaskListForm(request.POST or None)
+        tasks = Task.objects.all()
+
+        task = Task.objects.get(pk=task_id)
+        task.status = 'open'
+        task.save()
+
         user = UserProfile.objects.get(user=request.user)
         context = {
             'form': form,
             'tasks': tasks.filter(pk=task_id),
             'account': user
         }
-        return render(request, 'task.html', context)
+        return HttpResponseRedirect('/api/task/{}'.format(task_id))
+
+    def change_status_resolve(request, task_id):
+        form = TaskListForm(request.POST or None)
+        tasks = Task.objects.all()
+
+        task = Task.objects.get(pk=task_id)
+        task.status = 'resolve'
+        task.save()
+
+        user = UserProfile.objects.get(user=request.user)
+        context = {
+            'form': form,
+            'tasks': tasks.filter(pk=task_id),
+            'account': user
+        }
+        return HttpResponseRedirect('/api/task/{}'.format(task_id))
+
+    def change_status_cancel(request, task_id):
+        form = TaskListForm(request.POST or None)
+        tasks = Task.objects.all()
+
+        task = Task.objects.get(pk=task_id)
+        task.status = 'cancel'
+        task.save()
+
+        user = UserProfile.objects.get(user=request.user)
+        context = {
+            'form': form,
+            'tasks': tasks.filter(pk=task_id),
+            'account': user
+        }
+        return HttpResponseRedirect('/api/task/{}'.format(task_id))
 
 '''class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
