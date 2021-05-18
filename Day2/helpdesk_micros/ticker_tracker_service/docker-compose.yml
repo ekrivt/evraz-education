@@ -1,0 +1,29 @@
+version: '3'
+services:
+  ticket-service:
+    restart: always
+    build: .
+    container_name: dg02
+    command: bash -c "python3 manage.py makemigrations && python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - db2
+    volumes:
+      - ./src:/src
+    ports:
+      - "9000:8000"
+
+  db2:
+    restart: always
+    image: postgres:9.5
+    container_name: ps02
+    ports:
+      - "6432:5432"
+    environment:
+        - POSTGRES_PASSWORD=postgres
+        - POSTGRES_USER=postgres
+        - POSTGRES_DB=postgres
+
+networks:
+  default:
+    external: true
+    name: lab2-net

@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row" style="margin-bottom: 200px; margin-top: 160px">
+    <div class="col-md">
+        <h3 class="text-center">Список задач:</h3>
+        <hr>
+            <form action="" method="GET">
+                <div class="list-group">
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Project</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Performer</th>
+                            <th scope="col">Author</th>
+                        </tr>
+                        </thead>
+                        {% for task in tasks %}
+                        <tbody>
+                        <tr>
+                            <td>{{ task.name }}</td>
+                            <td>{{ task.project }}</td>
+                            <td>
+                            <select name="status" id="status" ONCHANGE="document.location = this.options[this.selectedIndex].value">
+                                <option value={{ task.status }}>{{ task.status }}</option>
+                                <option value="open">Открыт</option>
+                                <option value="resolve">Решен</option>
+                                <option value="cancle">Отменен</option>
+                              </select></td>
+                            <td>{{ task.performer }}</td>
+                            <td>{{ task.author }}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+    </div>    
+        <div class="col-md-9">
+            <h3 class="text-center">Добавить новую задачу:</h3>
+            <hr>
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="submit" class="btn btn-success btn-block" value="Добавить">
+            </form>
+        </div>   
+</div>
+{% endblock %}
