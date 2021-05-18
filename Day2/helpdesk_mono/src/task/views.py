@@ -48,8 +48,6 @@ class TaskView(View):
             new_task.save()
             new_task.performer = form.cleaned_data['performer']
             new_task.save()
-            #new_task.description = form.cleaned_data['description']
-            #new_task.save()
             new_task.author = self.request.user
             new_task.save()
 
@@ -78,6 +76,7 @@ class TaskDetailView(View):
     def get_task_by_id(request, task_id):
         form = TaskListForm(request.POST or None)
         tasks = Task.objects.all()
+        print(UserProfile.objects.all())
         user = UserProfile.objects.get(user=request.user)
         context = {
             'form': form,
@@ -116,8 +115,3 @@ class DescriptionViewSet(viewsets.ModelViewSet):
     queryset = Description.objects.all()
     serializer_class = DescriptionSerializer
     permission_classes = (IsOwnerProfileOrReadOnly,IsAuthenticated)
-
-    def get_permissions(self):
-        if self.request.method == 'DELETE':
-            return [IsAdminUser()]
-        return super().get_permissions()

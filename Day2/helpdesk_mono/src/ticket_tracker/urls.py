@@ -29,7 +29,6 @@ urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
 
-    path('api/', include(router.urls)),
     path('api/accounts/',include('accounts.urls')),
     path('api/task/', include('task.urls')),
     path('api/project/', include('project.urls')),

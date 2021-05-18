@@ -49,6 +49,7 @@ class LoginView(View):
             )
             if user:
                 login(request, user)
+                print('{} :Access granted'.format(user))
                 return HttpResponseRedirect('/api/project')
         context = {
             'form': form,
