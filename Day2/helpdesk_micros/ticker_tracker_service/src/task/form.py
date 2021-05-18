@@ -1,6 +1,9 @@
 from django import forms
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.http.response import HttpResponse
+from http import HTTPStatus
+import requests
 
 from .models import Task
 
@@ -59,12 +62,18 @@ class LoginForm(forms.ModelForm):
     def clean(self):
         username = self.cleaned_data['username']
         password = self.cleaned_data['password']
-        if not User.objects.filter(username=username).exists():
-            raise forms.ValidationError('Пользователь с логином {username} не найден в системе')
-        user = User.objects.filter(username=username).first()
-        if user:
-            if not user.check_password(password):
-                raise forms.ValidationError("Неверный пароль")
+
+        post_data = {
+                        "username": username,
+                        "password": password
+                    }
+        response = requests.post('http://user-service:8000/login/' , json=post_data, headers={ "Content-Type": "application/json" })
+
+        if response.status_code == HTTPStatus.NOT_FOUND:
+            raise forms.ValidationError('Пользователь с логином {} не найден в системе'.format(username))
+        if response.status_code == HTTPStatus.BAD_REQUEST:
+            raise forms.ValidationError("Неверный пароль")
+
         return self.cleaned_data
 
 

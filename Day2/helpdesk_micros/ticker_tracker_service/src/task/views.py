@@ -203,22 +203,15 @@ class LoginView(View):
         }
         return render(request, 'login.html', context)
 
-    '''def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         form = LoginForm(request.POST or None)
         if form.is_valid():
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password']
+            return HttpResponseRedirect('/project')
 
-            
-
-            if user:
-                login(request, user)
-                print('{} :Access granted'.format(user))
-                return HttpResponseRedirect('/api/project')
         context = {
             'form': form,
         }
-        return render(request, 'login.html', context, c)'''
+        return render(request, 'login.html', context, c)
 
 
 class RegistrationView(View):

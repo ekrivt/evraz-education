@@ -9,8 +9,6 @@ services:
       - db
     volumes:
       - ./src:/src
-    ports:
-      - "8000:8000"
 
   db:
     restart: always

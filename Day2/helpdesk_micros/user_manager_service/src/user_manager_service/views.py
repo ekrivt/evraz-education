@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import DetailView, View
 from django.contrib.auth import login, authenticate
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound, HttpResponseBadRequest
 from django.contrib.auth.models import User
 import requests
 from requests import status_codes
@@ -21,23 +21,33 @@ c = {}
 
 class LoginView(View):
 
-    def post(self, request, *args, **kwargs):
-        username = form.cleaned_data['username']
-        password = form.cleaned_data['password']
-        user = authenticate(
-            username=username, password=password
-        )
-        if user:
-            print('{} :Access granted'.format(user))
+    def post(request, *args, **kwargs):
 
-        res = HttpResponse()
-        res.status_code = 200
-        return res
+        body_unicode = request.body.decode('utf-8')
+        print(request.body)
+        body = json.loads(body_unicode)
+        print("body {}".format(body))
+
+        username = body['username']
+        password = body['password']
+
+        if not User.objects.filter(username=username).exists():
+            return HttpResponseNotFound()
+        user = User.objects.filter(username=username).first()
+        if user:
+            if user.password != password:
+                return HttpResponseBadRequest()
+
+        '''user = authenticate(
+            username=username, password=password
+            )'''
+        
+        return HttpResponse("Login OK")
 
 
 class RegistrationView(View):
 
-    def post( request, *args, **kwargs):
+    def post(request, *args, **kwargs):
         new_user = User()
         body_unicode = request.body.decode('utf-8')
         print(request.body)
@@ -48,6 +58,4 @@ class RegistrationView(View):
         new_user.password = body['password']
         new_user.save()
 
-        res = HttpResponse()
-        res.status_code = 200
-        return res
+        return HttpResponse("Registration OK")
