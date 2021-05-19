@@ -11,7 +11,9 @@ echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https:/
 sudo apt-get update
 
 sudo apt-get install -y kubelet kubeadm kubectl
+
 kubectl version
+
 chmod +x ./kubectl
 
 sudo mv ./kubectl /usr/local/bin/kubectl
