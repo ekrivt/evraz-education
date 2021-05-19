@@ -11,11 +11,11 @@
 ***Запуск***
 
     cd Day2/helpdesk_micros/user_manager_service
-    sudo docker-compose up --build
+    sudo docker-compose up --build -d
     cd -
 
     cd Day2/helpdesk_micros/ticker_tracker_service
-    sudo docker-compose up --build
+    sudo docker-compose up --build -d
 
 ***Доступ***
 
