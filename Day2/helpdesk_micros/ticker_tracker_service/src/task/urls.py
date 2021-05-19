@@ -13,7 +13,6 @@ from .views import (
 )
 
 urlpatterns = [
-    #path('', TaskViewSet.as_view(), name='task'),
     path('task/<int:task_id>/', TaskDetailView.get_task_by_id),
     path('task/<int:task_id>/open', TaskDetailView.change_status_open),
     path('task/<int:task_id>/resolve', TaskDetailView.change_status_resolve),

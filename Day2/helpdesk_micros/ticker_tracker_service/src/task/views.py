@@ -46,7 +46,7 @@ def get_username():
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    permission_classes = () #(IsOwnerProfileOrReadOnly,IsAuthenticated,)
+    permission_classes = ()
 
     filter_backends = (OrderingFilter, SearchFilter)
     search_fields = ('performer__username', 'author__username',
@@ -72,7 +72,7 @@ class TaskViewSet(viewsets.ModelViewSet):
 class ProfileView(viewsets.ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
-    permission_classes = () #(IsOwnerProfileOrReadOnly,IsAuthenticated,)
+    permission_classes = ()
 
     filter_backends = (OrderingFilter, SearchFilter)
     search_fields = ('performer__username', 'author__username',
@@ -94,11 +94,9 @@ class TaskDetailView(View):
     def get(self, request, *args, **kwargs):
         form = TaskListForm(request.POST or None)
         tasks = Task.objects.all()
-        #user = UserProfile.objects.get(user=self.request.user)
         context = {
             'form': form,
             'tasks': tasks,
-            #'account': user,
             'id': False
         }
         return render(request, 'task.html', context)
@@ -106,11 +104,9 @@ class TaskDetailView(View):
     def get_task_by_id(request, task_id):
         form = TaskListForm(request.POST or None)
         tasks = Task.objects.all()
-        #user = UserProfile.objects.get(user=request.user)
         context = {
             'form': form,
             'tasks': tasks.filter(pk=task_id),
-            #'account': user,
             'id' : True 
         }
         return render(request, 'task.html', context)
@@ -211,13 +207,6 @@ class LoginView(View):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
 
-            #user = User(username=username, password=password)
-            '''authenticate(
-                username=username, password=password
-            )'''
-
-            #login(request, user)
-            #print(self.request.user)
             return HttpResponseRedirect('/project')
 
         context = {

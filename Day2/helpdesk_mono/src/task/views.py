@@ -135,32 +135,6 @@ class TaskDetailView(View):
         }
         return HttpResponseRedirect('/api/task/{}'.format(task_id))
 
-'''class TaskViewSet(viewsets.ModelViewSet):
-    queryset = Task.objects.all()
-    serializer_class = TaskSerializer
-    permission_classes = (IsOwnerProfileOrReadOnly,IsAuthenticated,)
-
-    filter_backends = (OrderingFilter, SearchFilter)
-    search_fields = ('performer__username', 'author__username',
-                     'name', 'project__name', 'status', 'description__text')
-    ordering_fields = '__all__'
-    ordering = ('-id',)
-
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
-
-    def get_permissions(self):
-        if self.request.method == 'DELETE':
-            return [IsAdminUser()]
-        return super().get_permissions()
-
-    def get_queryset(self):
-        user = self.request.user
-        queryset = super().get_queryset()
-        if self.action == "list" and not user.is_staff:
-            queryset = queryset.filter(Q(author=user.pk) | Q(performer=user.pk))
-        return queryset'''
-
 class DescriptionViewSet(viewsets.ModelViewSet):
     queryset = Description.objects.all()
     serializer_class = DescriptionSerializer

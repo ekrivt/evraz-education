@@ -23,10 +23,7 @@ INSTALLED_APPS = [
     'accounts',
     'task',
     'project',
-
-    #'accounts.apps.AccountsConfig',
-    #'task.apps.TaskConfig',
-    #'project.apps.ProjectConfig',
+    
     'comment.apps.CommentConfig',
 ]
 

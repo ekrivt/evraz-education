@@ -17,8 +17,7 @@ from task.views import  DescriptionViewSet, TaskView
 from comment.views import CommentViewSet
 
 router = DefaultRouter()
-#router.register('project', ProjectViewSet)
-#router.register('task', TaskView)
+
 router.register('description', DescriptionViewSet)
 router.register('comment', CommentViewSet)
 

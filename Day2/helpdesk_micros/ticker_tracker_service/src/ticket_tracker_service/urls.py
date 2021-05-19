@@ -11,16 +11,13 @@ from project.views import ProjectViewSet
 
 import task
 from task import urls
-#from task.views import TaskViewSet
 
 router = DefaultRouter()
 router.register('project', ProjectViewSet)
-#router.register('task', TaskViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls, name = 'admin'),
 
-    #path('', include(router.urls)),
     path('', include(task.urls)),
     path('', include(project.urls)),
 ]

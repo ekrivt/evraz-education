@@ -14,13 +14,6 @@ from rest_framework.response import Response
 
 c = {}
 
-'''class ProfileView(viewsets.ModelViewSet):
-    serializer_class = TaskSerializer
-    permission_classes = () #(IsOwnerProfileOrReadOnly,IsAuthenticated,)
-
-    def get_profile(self, serializer):
-        serializer.save(author=self.request.user)'''
-
 class LoginView(View):
 
     def post(request, *args, **kwargs):
@@ -39,10 +32,6 @@ class LoginView(View):
         if user:
             if user.password != password:
                 return HttpResponseBadRequest()
-
-        '''user = authenticate(
-            username=username, password=password
-            )'''
         
         return HttpResponse("Login OK")
 

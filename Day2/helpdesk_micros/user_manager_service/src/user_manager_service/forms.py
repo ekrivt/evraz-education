@@ -42,8 +42,7 @@ class RegistrationForm(forms.ModelForm):
 
     confirm_password = forms.CharField(widget=forms.PasswordInput)
     password = forms.CharField(widget=forms.PasswordInput)
-    status = forms.CharField(max_length=10) #choices=STATUS_CHOICES, default=CLIENT, verbose_name='Статус')
-    #email = forms.EmailField(required=False)
+    status = forms.CharField(max_length=10)
 
     class Meta:
         model = User

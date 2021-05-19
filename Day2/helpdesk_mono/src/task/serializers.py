@@ -25,5 +25,4 @@ class TaskSerializer(serializers.ModelSerializer):
                   'author', 'description', 'comment')
 
     def perform_create(self, serializer):
-        # The request user is set as author automatically.
         serializer.save(author=self.request.user)

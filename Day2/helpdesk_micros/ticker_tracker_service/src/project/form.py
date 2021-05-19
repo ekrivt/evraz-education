@@ -27,22 +27,4 @@ class ProjectListForm(forms.ModelForm):
             )
         return name
 
-    #name = forms.CharField(max_length=100)
-    '''#project = forms.ChoiceField(choices = project_list)
-    status = forms.ChoiceField(choices = STATUS_CHOICES)
-    #performer = forms.ChoiceField(choices = users_list)
-    description = forms.CharField(widget=forms.Textarea)
-
-    class Meta:
-        model = Task
-        fields = ['name', 'project', 'status', 'performer', 'author' ,'description']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['name'].label = 'Название'
-        self.fields['project'].label = 'Проект'
-        self.fields['status'].label = 'Статус'
-        self.fields['performer'].label = 'Исполнитель'
-        self.fields['description'].lable = 'Описание' '''
-
     
