@@ -10,7 +10,7 @@ services:
     volumes:
       - ./src:/src
     ports:
-      - "9000:8000"
+      - "8000:8000"
 
   db2:
     restart: always

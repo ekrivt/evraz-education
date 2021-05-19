@@ -16,8 +16,6 @@ services:
     restart: always
     image: postgres:9.5
     container_name: ps01
-    ports:
-      - "5432:5432"
     environment:
         - POSTGRES_PASSWORD=postgres
         - POSTGRES_USER=postgres

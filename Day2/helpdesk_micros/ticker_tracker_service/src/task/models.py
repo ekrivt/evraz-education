@@ -31,7 +31,6 @@ class Task(models.Model):
 class Description(models.Model):
     task = models.ForeignKey(Task, verbose_name='Задача', related_name='description', on_delete=models.CASCADE)
     text = models.TextField(verbose_name='Описание')
-    #author = models.ForeignKey(User, verbose_name='Автор', related_name='task_author', on_delete=models.CASCADE)
 
     def __str__(self):
         return self.text
