@@ -25,7 +25,6 @@ class ProjectViewList(View):
             'form': form,
             'projects': projectlist,
             'tasks': tasklist,
-            'auth': True
         }
         return render(request, 'projects.html', context)
 
@@ -42,7 +41,6 @@ class ProjectViewList(View):
             'form': form,
             'projects': projectlist,
             'tasks': tasklist,
-            'auth': True
         }
         return render(request, 'projects.html', context, c)
 

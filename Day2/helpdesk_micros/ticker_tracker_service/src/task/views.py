@@ -42,20 +42,6 @@ def get_username():
         return user.get('username')
     return ""
 
-userlist = User.objects.all()
-if not userlist.filter(username='tmp_user').exists():
-    user = User.objects.create_user('tmp_user', 'tmp_pass')
-
-user = User.objects.get(username='tmp_user')
-
-class Auth():
-    auth_param = False
-
-    def set_in(self):
-        self.auth_param=True
-
-    def set_out(self):
-        self.auth_param=False
 
 class TaskViewSet(viewsets.ModelViewSet):
     queryset = Task.objects.all()
@@ -111,8 +97,7 @@ class TaskDetailView(View):
         context = {
             'form': form,
             'tasks': tasks,
-            'id': False,
-            'auth': True
+            'id': False
         }
         return render(request, 'task.html', context)
 
@@ -122,8 +107,7 @@ class TaskDetailView(View):
         context = {
             'form': form,
             'tasks': tasks.filter(pk=task_id),
-            'id' : True,
-            'auth': True
+            'id' : True 
         }
         return render(request, 'task.html', context)
 
@@ -168,8 +152,7 @@ class TaskView(View):
         context = {
             'form': form,
             'tasks': tasks,
-            'account': self.name,
-            'auth': True
+            'account': self.name
         }
         return render(request, 'task.html', context)
 
@@ -192,7 +175,6 @@ class TaskView(View):
         context = {
             'form': form,
             'tasks': tasks,
-            'auth': True
         }
         return render(request, 'task.html', context, c)
 
@@ -216,7 +198,6 @@ class LoginView(View):
         form = LoginForm(request.POST or None)
         context = {
             'form': form,
-            'auth': False
         }
         return render(request, 'login.html', context)
 
@@ -225,13 +206,11 @@ class LoginView(View):
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
-            
 
             return HttpResponseRedirect('/project')
 
         context = {
             'form': form,
-            'auth': False
         }
         return render(request, 'login.html', context, c)
 
@@ -242,7 +221,6 @@ class RegistrationView(View):
         form = RegistrationForm(request.POST or None)
         context = {
             'form': form,
-            'auth': False
         }
         return render(request, 'registration.html', context)
 
@@ -256,12 +234,6 @@ class RegistrationView(View):
             return HttpResponseRedirect('/login')
         context = {
             'form': form,
-            'auth': False
         }
         return render(request, 'registration.html', context, c)
-
-class LogoutView(View):
-
-    def logout(self):
-        return HttpResponseRedirect('/login')
     

@@ -32,26 +32,16 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           {% with account as acc %}
-            <li class="nav-item"><a class="nav-link" href="/project"></a>{{ acc }}</a></li>
+            <li class="nav-item"><a class="nav-link" href=""></a>{{ acc }}</a></li>
           {% endwith %}
         </ul>
       </div>
-      {% if auth %}
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a class="nav-link" href="/project">Проекты</a></li>
             <li class="nav-item"><a class="nav-link" href="/task">Задачи</a></li>
-            <li class="nav-item"><a class="nav-link" href="/logout">Выход</a></li>
         </ul>
       </div>
-      {% else %}
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a class="nav-link" href="{% url 'registration' %}">Регистрация</a></li>
-            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Вход</a></li>
-        </ul>
-      </div>
-      {% endif %}
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
         </ul>

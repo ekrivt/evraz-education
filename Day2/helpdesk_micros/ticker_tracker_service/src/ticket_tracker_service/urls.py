@@ -18,7 +18,6 @@ router.register('project', ProjectViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls, name = 'admin'),
 
-    
     path('', include(task.urls)),
     path('', include(project.urls)),
 ]
