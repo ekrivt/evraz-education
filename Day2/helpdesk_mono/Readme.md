@@ -49,7 +49,7 @@
 
     \dt
 
-Нас интересуют таблицв
+Нас интересуют таблица
 
     public | accounts_userprofile       | table | postgres
     public | auth_user                  | table | postgres
