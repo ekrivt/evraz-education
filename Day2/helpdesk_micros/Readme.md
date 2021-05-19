@@ -35,7 +35,7 @@
 
 Для этого зайдем в контейнер базы данных 
 
-    docker exec -it ps01 bash
+    sudo docker exec -it ps01 bash
 
 Запустится командная оболочка из контейнера
 
@@ -67,7 +67,7 @@
 
 Для этого зайдем в контейнер базы данных 
 
-    docker exec -it ps02 bash
+    sudo docker exec -it ps02 bash
 
 Запустится командная оболочка из контейнера
 
@@ -98,8 +98,8 @@
     
 ***Остановка***
 
-    docker-compose down
+    sudo docker-compose down
 
 ***Очистка системы***
 
-    docker system prune
+    sudo docker system prune
