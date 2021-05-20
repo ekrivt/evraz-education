@@ -2,7 +2,7 @@
 
 ## Пререквизиты
 
-- Наличие учетной записи RedHat ([https://cloud.redhat.com/openshift](https:/https://cloud.redhat.com/openshift))
+- Наличие учетной записи RedHat ([https://cloud.redhat.com/openshift](https://cloud.redhat.com/openshift))
 - Наличие ~35GB свободного дискового пространства (`df -h`)
 
 ## Установка CodeReady Containers
