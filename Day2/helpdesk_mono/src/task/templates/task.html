@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% if user.is_authenticated %}
+<div class="row" style="margin-bottom: 200px; margin-top: 160px">
+    <div class="col-md">
+        <h3 class="text-center">Список задач:</h3>
+        <hr>
+            <form action="" method="GET">
+                <div class="list-group">
+                    <table class="table">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Project</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Performer</th>
+                            <th scope="col">Author</th>
+                        </tr>
+                        </thead>
+                        {% with id as marker %}
+                        {% if marker %}
+                        {% for task in tasks %}
+                        <tbody>
+                        <tr>
+                            <td>{{ task.name }}</td>
+                            <td>{{ task.project }}</td>
+                            <td>
+                            <select name="status" id="status" ONCHANGE="document.location = this.options[this.selectedIndex].value">
+                                <option value={{ task.status }}>{{ task.status }}</option>
+                                <option value="open">open</option>
+                                <option value="resolve">resolve</option>
+                                <option value="cancel">cancel</option>
+                              </select></td>
+                            <td>{{ task.performer }}</td>
+                            <td>{{ task.author }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        {% for task in tasks %}
+                        <tbody>
+                        <tr>
+                            <td>{{ task.name }}</td>
+                            <td>{{ task.project }}</td>
+                            <td>{{ task.status }}</td>
+                            <td>{{ task.performer }}</td>
+                            <td>{{ task.author }}</td>
+                        </tr>
+                        {% endfor %}
+                        {% endif %}
+                        {% endwith %}
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+    </div>    
+    {% if account.status|stringformat:"s" == "client" or account.status|stringformat:"s" == "admin" %}
+        <div class="col-md-9">
+            <h3 class="text-center">Добавить новую задачу:</h3>
+            <hr>
+            <form action="" method="POST">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="submit" class="btn btn-success btn-block" value="Добавить">
+            </form>
+        </div>   
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
