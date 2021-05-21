@@ -25,7 +25,7 @@ docker login registry.ural.evraz.com:5008
 или
 
 ```shell
-podman login registry.ural.evraz.com:5008 # --tls-verify=false
+podman login registry.ural.evraz.com:5008 --tls-verify=false
 ```
 
 Собираем образ и присваиваем ему тэг
