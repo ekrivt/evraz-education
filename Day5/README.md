@@ -1,5 +1,9 @@
 # Лабораторная работа 5
 
+https://console-openshift-console.apps.osw.ntmk.ru/
+
+https://registry.ural.evraz.com/
+
 ## Push приложения в registry
 
 ```shell
