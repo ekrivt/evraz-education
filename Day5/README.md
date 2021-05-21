@@ -20,22 +20,22 @@ newgrp docker
 
 Авторизируемся в registry
 ```shell
-docker login $REGISTRY
+docker login registry.ural.evraz.com:5008
 ```
 или
 
 ```shell
-podman login $REGISTRY # --tls-verify=false
+podman login registry.ural.evraz.com:5008 # --tls-verify=false
 ```
 
 Собираем образ и присваиваем ему тэг
 ```shell
-docker build -t ${REGISTRY}/${SURNAME}-test-app:1.0.0 .
+docker build -t registry.ural.evraz.com:5008/${SURNAME}-test-app:1.0.0 .
 ```
 
 Делаем push во внешний registry
 ```shell
-docker push ${REGISTRY}/${SURNAME}-test-app:1.0.0
+docker push registry.ural.evraz.com:5008/${SURNAME}-test-app:1.0.0
 ```
 
 ![img](./.readme-images/01-registry.png)
