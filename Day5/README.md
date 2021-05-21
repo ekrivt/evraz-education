@@ -49,7 +49,7 @@ docker push registry.ural.evraz.com:5008/ВАША_ФАМИЛИЯ-test-app:1.0.0
 При желании, можете делать эти же операции в терминале
 
 ```shell
-oc login $CLUSTER_API_ADDRESS -u $YOUR_USERNAME
+oc login https://api.osw.ntmk.ru:6443 -u $YOUR_USERNAME
 ```
 
 Создадим новый проект:
