@@ -2,7 +2,7 @@
 
 ## Пререквизиты
 
-- Наличие учетной записи RedHat ([https://cloud.redhat.com/openshift](https:/https://cloud.redhat.com/openshift))
+- Наличие учетной записи RedHat ([https://cloud.redhat.com/openshift](https://cloud.redhat.com/openshift))
 - Наличие ~35GB свободного дискового пространства (`df -h`)
 
 ## Установка CodeReady Containers
@@ -102,7 +102,7 @@ tar -xvf oc.tar.gz
 sudo mv -t /usr/local/bin/ oc kubectl
 ```
 
-Авторизируемся в кластере как админ. Вводим пароль, полученный на этапе установки
+Авторизируемся в кластере как разработчик. Вводим пароль, полученный на этапе установки
 ```shell
 oc login https://api.crc.testing:6443 -u developer
 ```
