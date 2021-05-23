@@ -1,2 +1,2 @@
-- [**Лабораторная №2a**](Day2/helpdesk_mono/Readme.md)
-- [**Лабораторная №2b**](Day2/helpdesk_micros/Readme.md)
+- [**Лабораторная №2a**](helpdesk_mono/Readme.md)
+- [**Лабораторная №2b**](helpdesk_micros/Readme.md)
