@@ -32,7 +32,9 @@ docker --version
 ```shell
 sudo groupadd docker
 sudo usermod -aG docker $USER
+exit
 ```
+затем снова заходим по ssh на машину.
 
 ***Шаг №2. Скачиваем исходный код приложения***
 
@@ -74,62 +76,79 @@ Reading the table content...
 (5 rows)
 ```
 
-***Регистрация в DockerHub***
+***Шаг №4. Регистрация в DockerHub***
 
 Перейдем на сайт [https://hub.docker.com/](https://hub.docker.com/) и зарегистрируем бесплатную учетную запись
 
 Зайдем в свой аккаунт
 
-***Авторизация через Docker***
+***Шаг №5. Авторизация через Docker***
 
 ```shell
-sudo docker login
+docker login
 ```
-***Получение образа nginx***
+если в результате вы видите ошибку "Permission denied", то запустите
 
 ```shell
-sudo docker pull nginx
+sudo groupadd docker
+sudo usermod -aG docker $USER
+exit
 ```
-***Запуск образа nginx***
+затем снова заходим по ssh на машину.
+
+***Шаг №6. Получение образа nginx***
 
 ```shell
-sudo docker run -idt -p 80:80 nginx
+docker pull nginx
+```
+***Шаг№7. Запуск образа nginx***
+
+```shell
+docker run -idt -p 80:80 nginx
 ```    
 Перейдем в браузере по адресу `http://localhost/` или сделаем curl `http://localhost/`
 
+Видим надпись Thank you for using nginx.
 
-
-```shell
-sudo docker ps
-
-sudo docker container ls
-
-sudo docker stop *
-
-sudo docker container prune
-```
-
-***Просмотр локальных образов***
+***Шаг№8. Команды для работы с контейнерами***
 
 ```shell
-sudo docker image ls
+docker ps
 
-sudo docker image rm *
+docker container ls
 
-sudo docker image prune
+docker stop *
+
+docker container prune
 ```
-***Очистка docker***
+
+***Шаг №9. Просмотр локальных образов***
 
 ```shell
-sudo docker system prune
+docker image ls
+
+docker image rm *
+
+docker image prune
 ```
-***Создаем JSON файл с информацией для доступа к БД***
+***Шаг №10. Очистка docker***
+
+```shell
+docker system prune
+```
+***Шаг №11. Создаем JSON файл с информацией для доступа к БД***
+
+Перейдем в папку `app`:
+
+```shell
+cd app/
+```
 
 В папке `app` создадим файл dbcred.json следующего содержания:
 
 ```json
 {
-    "HOST":"внешний ip адрес",
+    "HOST":"внешний ip адрес вашей машины",
     "PORT":"5432",
     "DBNAME":"lab1_db",
     "USER":"postgres",
@@ -138,36 +157,54 @@ sudo docker system prune
 }
 ```
 
-***Установка GO:***
+***Шаг №12. Установка GO:***
 
 ```shell
 sudo apt install golang-go
 ```
-
-Добавим файл с исходным кодом приложения main.go в папку app и перейдем в нее
 
 Запустим go mod для подготовки списка модулей
 
 ```shell
 sudo go mod init main.go
 ```
-***Запустим контенер Nginx***
+***Шаг № 13. Запустим контенер Nginx***
+
+Проверим, что у нас не запущен контейнер nginx:
 
 ```shell
-sudo docker run --name nginx-proxy -it -p 80:80 -p 443:443 -v /etc/nginx/vhost.d \
+docker ps
+```
+
+Если контейнер запущен, удалим его.
+
+```shell
+docker rm -f Идентификатор контейнера
+```
+Запустим nginx:
+
+```shell
+docker run --name nginx-proxy -it -p 80:80 -p 443:443 -v /etc/nginx/vhost.d \
     -v /usr/share/nginx/html -v /var/run/docker.sock:/tmp/docker.sock:ro \
     -v /etc/nginx/certs -d jwilder/nginx-proxy
 ```
-***Создадим сеть***
+
+***Шаг №14. Создадим сеть***
 
 ```shell
-sudo docker network create lab-net
+docker network create lab-net
 
-sudo docker network connect lab-net nginx-proxy
+docker network connect lab-net nginx-proxy
 ```
-***Создадим Dockerfile для контейнеризации приложения***
+***Шаг№ 15. Создадим Dockerfile для контейнеризации приложения***
 
-Добавим в папку app файл Dockerfile со следующим содержанием
+Добавим в папку app файл Dockerfile
+
+```shell
+sudo nano Dockerfile
+```
+
+со следующим содержанием
 
 ```dockerfile
 FROM golang:alpine AS build
@@ -185,15 +222,15 @@ EXPOSE 80
 ENTRYPOINT /go/bin/web-app --port 80
 ```
 
-***Соберем образ из Dockerfile'а***
+***Шаг №16. Соберем образ из Dockerfile'а***
 
 ```shell
-sudo docker build -t lab1-app -f Dockerfile .
+docker build -t lab1-app -f Dockerfile .
 
-sudo docker run -it -e VIRTUAL_HOST=external_ip --network lab-net -d lab1-app
+docker run -it -e VIRTUAL_HOST=внешний адрес вашей машины!!! --network lab-net -d lab1-app
 ```
 
-***Создадим два Docker-compose файла для ускорения развертывания***
+***Шаг №17. Создадим два Docker-compose файла для ускорения развертывания***
 
 **nginx-compose.yaml**
 
@@ -223,24 +260,47 @@ services:
             dockerfile: Dockerfile
             context: .
         environment:
-          - VIRTUAL_HOST=external_ip
+          - VIRTUAL_HOST=внешний ip адрес вашей машины
 ```
 
-***Запустим Docker-compose для сборки и запуска контейнеров***
+***Шаг №18. Запустим Docker-compose для сборки и запуска контейнеров***
+
+Проверим, что у нас не запущены другие контейнеры:
 
 ```shell
-sudo docker-compose -f nginx-compose.yaml up -d 
-sudo docker-compose -f lab1-compose.yaml up -d 
+docker ps
 ```
-Проверим корректность работы приложения перейдя на адрес external_ip в браузере
 
-***Остановка контейнеров через Docker-compose***
+Если контейнер запущен, удалим его.
 
 ```shell
-sudo docker-compose -f nginx-compose.yaml down 
-sudo docker-compose -f lab1-compose.yaml down
+docker rm -f Идентификатор контейнера
 ```
-***Объединим оба compose-файла в один***
+
+```shell
+docker-compose -f nginx-compose.yaml up -d 
+docker-compose -f lab1-compose.yaml up -d 
+```
+Проверим корректность работы приложения перейдя на адрес external_ip в браузере или curl external_ip.
+В результате увидим:
+
+```shell
+<table border=1><caption><h2>Birthday list</h2>
+</caption><tr><th>Full Name</th><th>Date</th></tr>
+<tr><td>ERIC CLAPTON</td><td>1945-03-30</td></tr>
+<tr><td>TOM PETTY</td><td>1950-10-20</td></tr>
+<tr><td>GEORGE HARRISON</td><td>1943-02-25</td></tr>
+<tr><td>BOB DYLAN</td><td>1941-05-24</td></tr>
+<tr><td>ROY KELTON</td><td>1936-04-23</td></tr>
+```
+
+***Шаг №19. Остановка контейнеров через Docker-compose***
+
+```shell
+docker-compose -f nginx-compose.yaml down 
+docker-compose -f lab1-compose.yaml down
+```
+***Шаг № 20. Объединим оба compose-файла в один***
 
 **lab1-final-compose.yaml**
 
@@ -274,12 +334,12 @@ services:
 ***Запустим и проверим общий compose-файл***
 
 ```shell
-sudo docker-compose -f lab1-final-compose.yaml up -d 
+docker-compose -f lab1-final-compose.yaml up -d 
 ```
 ***Остановим все контейнеры и очистим систему***
 
 ```shell
-sudo docker-compose -f lab1-final-compose.yaml down
+docker-compose -f lab1-final-compose.yaml down
 
-sudo docker system prune
+docker system prune
 ```
