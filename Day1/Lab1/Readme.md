@@ -1,14 +1,12 @@
-***Требования***
+***Шаг №1. Установка Docker***
 
-В системе должна быть установлен
+Проверим, установлен ли Docker:
 
-- Docker >= 19
+```shell
+docker --version
+```
 
-- PostgresSQL >= 13.2
-
-- Go >= 1.1
-
-- пакеты alocate
+Если docker не установлен, переходим к установке
 
 ***Установка Docker:***
 
@@ -23,24 +21,57 @@ sudo apt-get update
 
 sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose
 ```
-***Скачиваем исходный код приложения из github***
-
-***Установка и настройка PostgreSQL:***
+Проверим, установился ли Docker:
 
 ```shell
-sudo ./prereq.sh
+docker --version
+```
 
+если в результате вы видите ошибку "Permission denied", то запустите
+
+```shell
+sudo groupadd docker
+sudo usermod -aG docker $USER
+```
+
+***Шаг №2. Скачиваем исходный код приложения***
+
+```shell
+git clone https://github.com/ekrivt/evraz-education.git
+```
+
+***Шаг №3. Установка и настройка PostgreSQL:***
+
+```shell
+sudo apt-get install mlocate
+sudo apt install postgresql postgresql-contrib
+sudo updatedb
+```
+
+```shell
 locate postgresql.conf
-
 sudo nano /etc/postgresql/12/main/postgresql.conf
+```
 
 найти строчку listen_addresses и добавить наш внешний ip aдрес после запятой
 сохранить
 
-locate pg_hba.conf
-sudo nano /etc/postgresql/12/main/pg_hba.conf
-
+```shell
+cd evraz-education/Day1/Lab1/
 sudo ./postgres.sh
+```
+В результате вы увидите в терминале таблицу:
+
+```shell
+Reading the table content...
+ id |      name       |   bdate    
+----+-----------------+------------
+  1 | ERIC CLAPTON    | 1945-03-30
+  2 | TOM PETTY       | 1950-10-20
+  3 | GEORGE HARRISON | 1943-02-25
+  4 | BOB DYLAN       | 1941-05-24
+  5 | ROY KELTON      | 1936-04-23
+(5 rows)
 ```
 
 ***Регистрация в DockerHub***
@@ -66,7 +97,7 @@ sudo docker run -idt -p 80:80 nginx
 ```    
 Перейдем в браузере по адресу `http://localhost/` или сделаем curl `http://localhost/`
 
-В новом терминале 
+
 
 ```shell
 sudo docker ps
