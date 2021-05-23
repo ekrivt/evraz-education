@@ -249,7 +249,7 @@ services:
           - "/var/run/docker.sock:/tmp/docker.sock:ro"
           - "/etc/nginx/certs"
 ```
-**lab1-compose**
+**lab1-compose.yaml**
 
 ```yaml
 version: '3'
