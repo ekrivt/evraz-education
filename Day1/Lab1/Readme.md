@@ -117,7 +117,7 @@ docker ps
 
 docker container ls
 
-docker stop *
+docker stop идентификатор контейнера
 
 docker container prune
 ```
@@ -127,7 +127,7 @@ docker container prune
 ```shell
 docker image ls
 
-docker image rm *
+docker image rm идентификатор контейнера
 
 docker image prune
 ```
