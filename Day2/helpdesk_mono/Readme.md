@@ -1,28 +1,51 @@
-***Начальные настройки***
+***Шаг №1. Настройка системы***
 
 1) Удалим postgresql c виртуальной машины
 
-        sudo apt-get remove postgresql postgres-contrib
-
+```shell
+sudo apt-get remove postgresql postgres-contrib
+```
+        
+   Если мы видимо ошибку:
+   `E: Unable to locate package postgres-contrib`,
+   то запускаем команду:
+   
+```shell
+sudo dpkg --purge postgresql postgres-contrib
+```
+  
 2) Освободим порты
 
-        sudo fuser -vn tcp 5432
+```shell
+sudo fuser -vn tcp 5432
+```
 
-Команда вернет список портов и PID процессов использующего этот IP
+Команда вернет список портов и PID процессов, использующих эти порты
 
-    sudo kill -9 {указать PID}
+```shell
+sudo kill -9 {указать PID}
+```
 
-3) Добавить IP-адрес виртуальной машины в переменную ALLOWED_HOSTS в следующий файл:
+3) Добавим IP-адрес виртуальной машины в переменную ALLOWED_HOSTS в следующий файл:
+
+```shell
+sudo nano Day2/helpdesk_mono/src/ticket_tracker/settings.py
+```
     
-        sudo nano Day2/helpdesk_mono/src/ticket_tracker/settings.py 
+***Шаг №2. Запуск приложения***
 
-***Запуск***
-
-    sudo docker-compose up --build -d
-
-***Доступ***
-
-    http://{IP-адрес виртуальной машины}:8000/ - главная страница
+1) Посмотрим содержимое `docker-compose.yml` файла:
+```shell
+cat docker-compose.yml
+```
+2) Запустим приложение:
+```shell
+docker-compose up --build -d
+```
+3) Проверим, что наше приложение доступно. Для этого в браузере зайдем на 8000 порт:
+```shell
+http://{IP-адрес виртуальной машины}:8000/
+```
 
 ***Работа с приложением***
 
