@@ -53,7 +53,7 @@ docker exec -it ps01 bash
 
     \dt
 
-Нас интересуют таблица
+Нас интересуют таблицы
 
     public | auth_user                  | table | postgres
     public | authtoken_token            | table | postgres
@@ -86,7 +86,7 @@ docker exec -it ps02 bash
 
     \dt
 
-Нас интересуют таблица
+Нас интересуют таблицы
 
     public | project_project            | table | postgres
     public | task_task                  | table | postgres
