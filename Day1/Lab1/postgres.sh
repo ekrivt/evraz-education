@@ -11,10 +11,6 @@ export LOCAL_IP=${LOCAL_IP}
 echo
 
 echo
-echo "Updatedb"
-updatedb
-
-echo
 echo "Searching for PostgreSQL configuration file..."
 POSTGRES_CONF_FILE=$(locate postgresql.conf | head -n 1)
 echo "PostgreSQL configuration file is ${POSTGRES_CONF_FILE}"
