@@ -31,6 +31,8 @@ http://{IP-адрес виртуальной машины}:8000/registration
 
 3) Создайте задачу под проект
 
+
+
 ***Шаг №4. Работа с базами данных***
 
 **User Manager Service**
@@ -51,7 +53,7 @@ docker exec -it ps01 bash
 
     \dt
 
-Нас интересуют таблицв
+Нас интересуют таблица
 
     public | auth_user                  | table | postgres
     public | authtoken_token            | table | postgres
@@ -60,7 +62,7 @@ docker exec -it ps01 bash
 
     SELECT * FROM auth_user;
 
-Произведем выход из СУБД и контейнера
+Выйдем из СУБД и контейнера
 
     \q
 
@@ -84,7 +86,7 @@ docker exec -it ps02 bash
 
     \dt
 
-Нас интересуют таблицв
+Нас интересуют таблица
 
     public | project_project            | table | postgres
     public | task_task                  | table | postgres
@@ -94,7 +96,7 @@ docker exec -it ps02 bash
     SELECT * FROM project_project;
     SELECT * FROM task_task;
 
-Произведем выход из СУБД и контейнера
+Выйдем из СУБД и контейнера
 
     \q
 
