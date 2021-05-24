@@ -144,6 +144,10 @@ docker system prune
 cd app/
 ```
 
+```shell
+sudo nano dbcred.json
+```
+
 В папке `app` создадим файл dbcred.json следующего содержания:
 
 ```json
