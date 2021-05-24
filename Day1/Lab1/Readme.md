@@ -55,7 +55,7 @@ locate postgresql.conf
 sudo nano /etc/postgresql/12/main/postgresql.conf
 ```
 
-найти строчку listen_addresses, удалить первый символ `#` и добавить наш внешний ip aдрес после запятой
+найти строчку listen_addresses, удалить первый символ `#` и добавить наш внешний ip aдрес после запятой,
 сохранить
 
 ```shell
