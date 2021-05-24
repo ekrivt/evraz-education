@@ -1,27 +1,29 @@
-***Начальные настройки***
+***Шаг№ 1. Настройка***
 
 1) Создадим новую docker-сеть 
+```shell
+docker network create lab2-net
+```
+2) Перейдем в папку `evraz-education`. Добавим IP-адрес виртуальной машины в переменную ALLOWED_HOSTS в следующих файлах:
+```shell
+sudo nano Day2/helpdesk_micros/ticker_tracker_service/src/ticket_tracker_service/settings.py
+```
 
-        sudo docker network create lab2-net
+***Шаг №2. Запуск***
 
-3) Добавить IP-адрес виртуальной машины в переменную ALLOWED_HOSTS в следующих файлах:
+```shell
+cd Day2/helpdesk_micros/user_manager_service
+docker-compose up --build -d
+cd ../ticker_tracker_service
+docker-compose up --build -d
+```
 
-        sudo nano Day2/helpdesk_micros/ticker_tracker_service/src/ticket_tracker_service/settings.py 
+Проверим доступность нашего приложения:
+```shell
+http://{IP-адрес виртуальной машины}:8000/registration
+```
 
-***Запуск***
-
-    cd Day2/helpdesk_micros/user_manager_service
-    sudo docker-compose up --build -d
-    cd -
-
-    cd Day2/helpdesk_micros/ticker_tracker_service
-    sudo docker-compose up --build -d
-
-***Доступ***
-
-    http://{IP-адрес виртуальной машины}:8000/registration
-
-***Работа с приложением***
+***Шаг №3. Работа с приложением***
 
 1) Зарегистрируйте пользователя
 
@@ -29,13 +31,14 @@
 
 3) Создайте задачу под проект
 
-***Познакомимся с базами данных***
+***Шаг №4. Работа с базами данных***
 
 **User Manager Service**
 
 Для этого зайдем в контейнер базы данных 
-
-    sudo docker exec -it ps01 bash
+```shell
+docker exec -it ps01 bash
+```
 
 Запустится командная оболочка из контейнера
 
@@ -66,8 +69,9 @@
 **Ticket Tracker Service**
 
 Для этого зайдем в контейнер базы данных 
-
-    sudo docker exec -it ps02 bash
+```shell
+docker exec -it ps02 bash
+```
 
 Запустится командная оболочка из контейнера
 
@@ -96,10 +100,12 @@
 
     exit
     
-***Остановка***
+***Шаг №5. Остановка***
+```shell
+docker-compose down
+```
 
-    sudo docker-compose down
-
-***Очистка системы***
-
-    sudo docker system prune
+***Шаг №6. Очистка системы***
+```shell
+docker system prune
+```
