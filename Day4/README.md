@@ -48,6 +48,13 @@ sudo mv crc-linux-1.26.0-amd64/crc /usr/local/bin/
 crc setup
 ```
 
+Если при первом запуске вы получите такое сообщение
+```
+You need to logout, re-login, and run crc setup again before the user is effectively a member of the 'libvirt' group.
+```
+то выполняем `exit`, заходим заново по `ssh` и еще раз выполняем `crc setup`
+
+
 В браузере переходим на [https://cloud.redhat.com/openshift/create/local](https://cloud.redhat.com/openshift/create/local) под своей учетной записью. Нажимаем на кнопку `Copy pull secret`.
 
 Возвращаемся в терминал, запускаем CRC.
@@ -99,7 +106,7 @@ tar -xvf oc.tar.gz
 sudo mv -t /usr/local/bin/ oc kubectl
 ```
 
-Авторизируемся в кластере как разработчик. Вводим пароль, полученный на этапе установки
+Авторизируемся в кластере. Вводим пароль, полученный на этапе установки
 ```shell
 oc login https://api.crc.testing:6443 -u kubeadmin
 ```
@@ -121,9 +128,9 @@ chmod +x odo-linux-amd64
 sudo mv odo-linux-amd64 /usr/local/bin/odo
 ```
 
-Авторизируемся в кластере как разработчик. Вводим пароль, полученный на этапе установки
+Авторизируемся в кластере. Вводим пароль, полученный на этапе установки
 ```shell
-odo login https://api.crc.testing:6443 -u developer
+odo login https://api.crc.testing:6443 -u kubeadmin
 ```
 
 ## Развертка приложения
@@ -141,15 +148,10 @@ odo project create django-by-odo
 
 Создаем _component_
 ```shell
-odo create python
+odo create python-django
 ```
 
-Меняем команду запуска приложения
-```shell
-nano devfile.yaml
-```
-Меняем `commandLine: python app.py` на `commandLine: python manage.py runserver`
-
+Выставляем переменную окружения
 ```shell
 odo config set --env PYTHONUNBUFFERED=1
 ```
