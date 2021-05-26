@@ -55,7 +55,9 @@ You need to logout, re-login, and run crc setup again before the user is effecti
 то выполняем `exit`, заходим заново по `ssh` и еще раз выполняем `crc setup`
 
 
-В браузере переходим на [https://cloud.redhat.com/openshift/create/local](https://cloud.redhat.com/openshift/create/local) под своей учетной записью. Нажимаем на кнопку `Copy pull secret`.
+В браузере переходим на [https://cloud.redhat.com/openshift/create/local](https://cloud.redhat.com/openshift/create/local) под своей учетной записью. 
+
+Нажимаем на кнопку `Copy pull secret`.
 
 Возвращаемся в терминал, запускаем CRC.
 ```shell
