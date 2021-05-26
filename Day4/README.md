@@ -213,6 +213,13 @@ CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
   sudo cp tls.crt /etc/docker/certs.d/default-route-openshift-image-registry.apps-crc.testing/
   ```
   
+  В случае, если Docker не работает без _sudo_
+
+  ```shell
+  sudo groupadd docker
+  sudo usermod -aG docker $USER
+  ```
+  
   Авторизируемся во внутринем registry
   ```shell
   docker login -u $(oc whoami) -p $(oc whoami -t) default-route-openshift-image-registry.apps-crc.testing
