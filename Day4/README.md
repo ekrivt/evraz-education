@@ -27,28 +27,25 @@ tar -xvf crc-linux-amd64.tar.xz
 sudo mv crc-linux-1.26.0-amd64/crc /usr/local/bin/
 ```
 
-_В рамках лабораторной работы, из-за некоторых ограничений виртуальной машины, мы вынуждены сделать действия ниже. В иных условиях эти действия не потребуются._
+---
 
-```shell
-crc config set network-mode vsock
-```
-либо
-```shell
-crc config set skip-check-systemd-networkd-running true
-```
+<details>
+  <summary>В рамках лабораторной работы, из-за некоторых ограничений виртуальной машины, мы вынуждены сделать данные действия. В иных условиях эти действия не потребуются.</summary>
+  
+  ```shell
+  crc config set skip-check-systemd-networkd-running true
+  ```
+  
+  ```shell
+  sudo bash -c "echo 'options kvm ignore_msrs=1' >> /etc/modprobe.d/qemu-system-x86.conf"
+  ```
+</details>
 
-```shell
-sudo bash -c "echo 'options kvm ignore_msrs=1' >> /etc/modprobe.d/qemu-system-x86.conf"
-```
+---
 
 Выполняем установку CodeReady Containers
 ```shell
 crc setup
-```
-
-_В отдельном терминале запускаем демона для vsock_ *
-```shell
-crc daemon
 ```
 
 В браузере переходим на [https://cloud.redhat.com/openshift/create/local](https://cloud.redhat.com/openshift/create/local) под своей учетной записью. Нажимаем на кнопку `Copy pull secret`.
@@ -58,7 +55,7 @@ crc daemon
 crc start
 ```
 
-Вставляем _pull secret_, на этапе когда мастер установки нас об этом попросит.
+Вставляем _pull secret_ на этапе, когда мастер установки нас об этом попросит.
 
 Первоначальный запуск займет какое-то время.
 
@@ -104,7 +101,7 @@ sudo mv -t /usr/local/bin/ oc kubectl
 
 Авторизируемся в кластере как разработчик. Вводим пароль, полученный на этапе установки
 ```shell
-oc login https://api.crc.testing:6443 -u developer
+oc login https://api.crc.testing:6443 -u kubeadmin
 ```
 
 ### Установка ODO
@@ -194,33 +191,84 @@ RUN python manage.py migrate
 CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
 ```
 
-Установим _podman_
-```shell
-source /etc/os-release
-sudo sh -c "echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list"
-wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/xUbuntu_${VERSION_ID}/Release.key -O- | sudo apt-key add -
-sudo apt-get update -qq
-sudo apt-get -qq --yes install podman
-```
+---
 
-Авторизируемся во внутринем registry
-```shell
-podman login -u developer -p $(oc whoami -t) default-route-openshift-image-registry.apps-crc.testing --tls-verify=false
-```
+<details>
+  <summary>Вариант с Docker</summary>
+  
+  Экспортируем TLS сертификат от внутреннего OpenShift _registry_
+  ```shell
+  oc extract secret/router-ca --keys=tls.crt -n openshift-ingress-operator
+  ```
+  
+  Создаем директорию под TLS сертификат для Docker
+  ```shell
+  sudo mkdir -p /etc/docker/certs.d/default-route-openshift-image-registry.apps-crc.testing/
+  ```
+  
+  Копируем TLS сертификат для Docker
+  ```shell
+  sudo cp tls.crt /etc/docker/certs.d/default-route-openshift-image-registry.apps-crc.testing/
+  ```
+  
+  Авторизируемся во внутринем registry
+  ```shell
+  docker login -u $(oc whoami) -p $(oc whoami -t) default-route-openshift-image-registry.apps-crc.testing
+  ```
 
-Собираем образ
-```shell
-podman build -t default-route-openshift-image-registry.apps-crc.testing/django-by-oc/django-by-oc-image .
-```
+  Собираем образ
+  ```shell
+  docker build -t default-route-openshift-image-registry.apps-crc.testing/django-by-oc/django-by-oc-image .
+  ```
 
-Отправляем образ в registry
-```shell
-podman push default-route-openshift-image-registry.apps-crc.testing/django-by-oc/django-by-oc-image --tls-verify=false
-```
+  Отправляем образ в registry
+  ```shell
+  docker push default-route-openshift-image-registry.apps-crc.testing/django-by-oc/django-by-oc-image
+  ```
+</details>
+
+<details>
+  <summary>Вариант с Podman</summary>
+  
+  Установим _podman_
+  ```shell
+  source /etc/os-release
+  sudo sh -c "echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list"
+  wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/xUbuntu_${VERSION_ID}/Release.key -O- | sudo apt-key add -
+  sudo apt-get update -qq
+  sudo apt-get -qq --yes install podman
+  ```
+
+  Авторизируемся во внутринем registry
+  ```shell
+  podman login -u $(oc whoami) -p $(oc whoami -t) default-route-openshift-image-registry.apps-crc.testing --tls-verify=false
+  ```
+
+  Собираем образ
+  ```shell
+  podman build -t default-route-openshift-image-registry.apps-crc.testing/django-by-oc/django-by-oc-image .
+  ```
+
+  Отправляем образ в registry
+  ```shell
+  podman push default-route-openshift-image-registry.apps-crc.testing/django-by-oc/django-by-oc-image --tls-verify=false
+  ```
+  
+</details>
+
+---
 
 Выполняем деплой приложения
 ```shell
 oc set image-lookup django-by-oc-image
 
 oc new-app django-by-oc-image
+```
+
+```shell
+oc get pods
+```
+
+```shell
+oc logs ID_ВАШЕГО_ПОДА
 ```
