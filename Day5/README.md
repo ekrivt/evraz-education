@@ -15,6 +15,7 @@ cd app
 ```shell
 sudo groupadd docker
 sudo usermod -aG docker $USER
+exit
 ```
 
 Авторизируемся в registry
