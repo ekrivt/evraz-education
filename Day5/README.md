@@ -21,7 +21,7 @@ exit
 ```shell
 docker login registry.ural.evraz.com:5008
 ```
-или
+или через _podman_
 
 ```shell
 podman login registry.ural.evraz.com:5008 --tls-verify=false
