@@ -1,7 +1,7 @@
 # Лабораторная работа 5
 
-Web-консоль OpenShift: https://console-openshift-console.apps.osw.ntmk.ru/
-Registry: https://registry.ural.evraz.com/
+- Web-консоль OpenShift: https://console-openshift-console.apps.osw.ntmk.ru/
+- Nexus Registry: https://registry.ural.evraz.com/
 
 ## Push приложения в registry
 
