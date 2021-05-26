@@ -15,7 +15,6 @@ cd app
 ```shell
 sudo groupadd docker
 sudo usermod -aG docker $USER
-newgrp docker
 ```
 
 Авторизируемся в registry
@@ -30,12 +29,12 @@ podman login registry.ural.evraz.com:5008 --tls-verify=false
 
 Собираем образ и присваиваем ему тэг
 ```shell
-docker build -t registry.ural.evraz.com:5008/ВАША_ФАМИЛИЯ-test-app:1.0.0 .
+docker build -t registry.ural.evraz.com:5008/ВАША-ФАМИЛИЯ-В-НИЖНЕМ-РЕГИСТРЕ-test-app:1.0.0 .
 ```
 
 Делаем push во внешний registry
 ```shell
-docker push registry.ural.evraz.com:5008/ВАША_ФАМИЛИЯ-test-app:1.0.0
+docker push registry.ural.evraz.com:5008/ВАША-ФАМИЛИЯ-В-НИЖНЕМ-РЕГИСТРЕ-test-app:1.0.0
 ```
 
 ![img](./.readme-images/01-registry.png)
