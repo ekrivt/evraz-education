@@ -21,11 +21,17 @@ exit
 ```shell
 docker login registry.ural.evraz.com:5008
 ```
-или через _podman_
 
-```shell
-podman login registry.ural.evraz.com:5008 --tls-verify=false
-```
+
+<details>
+  <summary>или через podman</summary>
+  
+  ```shell
+  podman login registry.ural.evraz.com:5008 --tls-verify=false
+  ```
+  
+  в таком случае остальные команды тоже делаем через podman
+</details>
 
 Собираем образ и присваиваем ему тэг
 ```shell
