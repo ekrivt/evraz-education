@@ -48,7 +48,7 @@ docker push registry.ural.evraz.com:5008/ВАША-ФАМИЛИЯ-В-НИЖНЕМ
 При желании, можете делать эти же операции в терминале
 
 ```shell
-oc login https://api.osw.ntmk.ru:6443 -u $YOUR_USERNAME
+oc login https://api.osw.ntmk.ru:6443 -u ВАШ_ЛОГИН
 ```
 
 Создадим новый проект:
